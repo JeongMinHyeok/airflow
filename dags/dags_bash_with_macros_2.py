@@ -12,7 +12,7 @@ with DAG(
     # START_DATE: 2주 전 월요일, END_DATE: 2주 전 토요일
     bash_task_2 = BashOperator(
         task_id = 'bash_task_2',
-        env = {'START_DATE': '{{ (data_interval_end.in_timezone("Asia/Seoul") - macros.dateutil.relativedelat.relativedelat(days=19)) | ds }}', # 배치일로부터 19일 전 = 2주 전 월요일
-               'END_DATE' : '{{ (data_interval_end.in_timezone("Asia/Seoul") - macros.dateutil.relativedelat.relativedelat(days=14)) | ds }}'}, # 배치일로부터 14일 전 = 2주 전 토요일
+        env = {'START_DATE': '{{ (data_interval_end.in_timezone("Asia/Seoul") - macros.dateutil.relativedelta.relativedelta(days=19)) | ds }}', # 배치일로부터 19일 전 = 2주 전 월요일
+               'END_DATE' : '{{ (data_interval_end.in_timezone("Asia/Seoul") - macros.dateutil.relativedelta.relativedelta(days=14)) | ds }}'}, # 배치일로부터 14일 전 = 2주 전 토요일
         bash_command = 'echo "START_DATE: $START_DATE" && echo "END_DATE: $END_DATE"'
     )

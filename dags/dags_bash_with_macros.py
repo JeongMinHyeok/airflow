@@ -13,7 +13,7 @@ with DAG(
     bash_task_1 = BashOperator(
         task_id = 'bash_task_1',
         env = {'START_DATE': '{{ data_interval_start.in_timezone("Asia/Seoul") | ds }}', # .in_timezone() : ()안의 해당하는 시간대로 출력해줌 (기본 설정 = UTC)
-               'END_DATE' : '{{ (data_interval_end.in_timezone("Asia/Seoul") - macros.dateutil.relativedelat.relativedelat(days=1)) | ds }}'}, # 수행일로부터 하루 전(1일 빼기)
+               'END_DATE' : '{{ (data_interval_end.in_timezone("Asia/Seoul") - macros.dateutil.relativedelta.relativedelta(days=1)) | ds }}'}, # 수행일로부터 하루 전(1일 빼기)
         bash_command = 'echo "START_DATE: $START_DATE" && echo "END_DATE: $END_DATE"'
     )
     
