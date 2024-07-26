@@ -50,23 +50,17 @@ class SeoulApiToCsvOperator(BaseOperator):
         request_url = f'{base_url}/{start_row}/{end_row}/'
         if self.base_dt is not None:
             request_url = f'{base_url}/{start_row}/{end_row}/{self.base_dt}'
+
         try:
-            response = requests.get(request_url, headers)
-            contents = json.loads(response.text)
+            response = requests.get(request_url, headers=headers)
+            response.raise_for_status()
+            contents = response.json()
+        except requests.exceptions.RequestException as e:
+            self.log.error(f"API 요청 실패: {e}")
+            raise
 
-            key_nm = list(contents.keys())[0]
-            row_data = contents.get(key_nm).get('row')
-            row_df = pd.DataFrame(row_data)
+        key_nm = list(contents.keys())[0]
+        row_data = contents.get(key_nm).get('row', [])
+        row_df = pd.DataFrame(row_data)
 
-            return row_df
-        
-        except:
-            time.sleep(2)
-            response = requests.get(request_url, headers)
-            contents = json.loads(response.text)
-
-            key_nm = list(contents.keys())[0]
-            row_data = contents.get(key_nm).get('row')
-            row_df = pd.DataFrame(row_data)
-
-            return row_df
+        return row_df
