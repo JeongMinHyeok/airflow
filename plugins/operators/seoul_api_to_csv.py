@@ -10,7 +10,7 @@ class SeoulApiToCsvOperator(BaseOperator): # 클래스 상속
         self.http_conn_id = 'openapi.seoul.go.kr' # 커넥션 ID를 미리 지정 (input으로 받지 않고 이것만 사용)
         self.path = path # 파일을 저장할 경로
         self.file_name = file_name
-        self.endpoint = '{{var.value.apikey_openapi_seoul_go_kr}}/json' + dataset_nm
+        self.endpoint = '{{var.value.apikey_openapi_seoul_go_kr}}/json/' + dataset_nm
         self.base_dt = base_dt
 
     def execute(self, context):
