@@ -1,6 +1,6 @@
 from airflow.models.baseoperator import BaseOperator
 from airflow.hooks.base import BaseHook
-import pandas as pd 
+import pandas as pd
 
 class SeoulApiToCsvOperator(BaseOperator):
     template_fields = ('endpoint', 'path','file_name','base_dt')
@@ -39,21 +39,34 @@ class SeoulApiToCsvOperator(BaseOperator):
 
     def _call_api(self, base_url, start_row, end_row):
         import requests
-        import json 
+        import json
+        import time
 
-        headers = {'Content-Type': 'application/json',
-                   'charset': 'utf-8',
-                   'Accept': '*/*'
-                   }
+        headers={'Content-Type': 'application/json',
+                        'charset': 'utf-8',
+                        'Accept': '*/*'
+                        }
 
         request_url = f'{base_url}/{start_row}/{end_row}/'
         if self.base_dt is not None:
             request_url = f'{base_url}/{start_row}/{end_row}/{self.base_dt}'
-        response = requests.get(request_url, headers)
-        contents = json.loads(response.text)
+        try:
+            response = requests.get(request_url, headers)
+            contents = json.loads(response.text)
 
-        key_nm = list(contents.keys())[0]
-        row_data = contents.get(key_nm).get('row')
-        row_df = pd.DataFrame(row_data)
+            key_nm = list(contents.keys())[0]
+            row_data = contents.get(key_nm).get('row')
+            row_df = pd.DataFrame(row_data)
 
-        return row_df
+            return row_df
+        
+        except:
+            time.sleep(2)
+            response = requests.get(request_url, headers)
+            contents = json.loads(response.text)
+
+            key_nm = list(contents.keys())[0]
+            row_data = contents.get(key_nm).get('row')
+            row_df = pd.DataFrame(row_data)
+
+            return row_df
