@@ -40,7 +40,6 @@ class SeoulApiToCsvOperator(BaseOperator):
     def _call_api(self, base_url, start_row, end_row):
         import requests
         import json
-        import time
 
         headers={'Content-Type': 'application/json',
                         'charset': 'utf-8',
@@ -54,7 +53,7 @@ class SeoulApiToCsvOperator(BaseOperator):
         try:
             response = requests.get(request_url, headers=headers)
             response.raise_for_status()
-            contents = response.json()
+            contents = json.loads(response.text)
         except requests.exceptions.RequestException as e:
             self.log.error(f"API 요청 실패: {e}")
             raise
