@@ -13,7 +13,7 @@ with DAG(
     seoul_rain_fall_10m = SeoulApiToCsvOperator(
         task_id = 'seoul_rain_fall_10m',
         dataset_nm='ListRainfallService',
-        path='/home/airflow/files/seoul_rainfall_10m/{{data_interval_end.in_timezone("Asia/Seoul") | ds_nodash}}',
+        path='/opt/airflow/files/seoul_rainfall_10m/{{data_interval_end.in_timezone("Asia/Seoul") | ds_nodash}}',
         file_name='Seoul_Rainfall_10m.csv'
     )
 
