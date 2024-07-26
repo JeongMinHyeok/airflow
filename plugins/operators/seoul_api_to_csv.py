@@ -34,7 +34,7 @@ class SeoulApiToCsvOperator(BaseOperator):
                 end_row += 1000
 
         if not os.path.exists(self.path):
-            os.makedirs(self.path)
+            os.makedirs(self.path, mode=0o755)
             self.log.info('폴더 생성')
         total_row_df.to_csv(self.path + '/' + self.file_name, encoding='utf-8', index=False)
 
