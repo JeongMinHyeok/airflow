@@ -35,8 +35,7 @@ class SeoulApiToCsvOperator(BaseOperator):
 
         if not os.path.exists(self.path):
             os.system(f'mkdir -p {self.path}')
-            os.system("ls -al")
-            self.log.info('폴더 생성')
+            self.log.info(os.system("ls -al"))
         total_row_df.to_csv(self.path + '/' + self.file_name, encoding='utf-8', index=False)
 
     def _call_api(self, base_url, start_row, end_row):
